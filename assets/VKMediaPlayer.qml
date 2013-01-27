@@ -1,0 +1,393 @@
+import bb.cascades 1.0
+import bb.multimedia 1.0
+
+Sheet {
+    id: mediaDialog
+    property bool mylist: true
+    property alias title: title.text
+    property alias artist: artist.text
+                
+    signal addMusic(int index)
+    signal trackChanged(int index)
+        
+    function musicAdded() {
+        add.enabled = false;
+        add.checked = false;
+    }
+    
+    function play(sourceUrl, index) {
+        player.reset();
+        player.sourceUrl = sourceUrl;
+        player.play();
+        player.seekTrack(index + 1);
+    }
+            
+    Page {
+        titleBar: TitleBar {
+            visibility: Overlay
+                    
+            dismissAction: ActionItem {
+                title: qsTr("Done")
+                onTriggered: {
+                    mediaDialog.close();
+                }
+            }
+        }    
+        
+        // Control tab        
+        Container {     
+            background: Color.Black
+            layout: DockLayout  {
+            }
+            
+            Container {
+                layout: StackLayout {
+                }
+                
+                horizontalAlignment: HorizontalAlignment.Fill
+                                            
+                topPadding: 40
+                leftPadding: 30
+                rightPadding: 30 
+                
+                Label {
+                   id: buffering
+                   text: "Buffering 0 %"
+                   visible: false
+                   textStyle {
+                       base: SystemDefaults.TextStyles.BodyText
+                       color: Color.White
+                   }
+                   horizontalAlignment: HorizontalAlignment.Center
+               }
+               
+               Container {
+                   layout: DockLayout  {
+                   }
+                   
+                   horizontalAlignment: HorizontalAlignment.Fill
+                   
+                   Label {
+                       id: elapsed
+                       text: duration.msToString(toValue, false)
+                       textStyle {
+                          color: Color.White
+                       }
+                       
+                       verticalAlignment: VerticalAlignment.Center 
+                   }
+                   
+                   Slider {
+                       id: duration
+                       property bool seekInProgress: false
+                       property int requestedValue
+                       property bool wasPlaying: false
+                       
+                       enabled: false
+                       fromValue: 0
+                       toValue: player.duration
+                       preferredWidth: 530
+                    
+                       horizontalAlignment: HorizontalAlignment.Center
+                       verticalAlignment: VerticalAlignment.Center
+                       
+                       onTouch: {
+	                       if (event.isDown()) {	                           
+	                           seekInProgress = true;
+	                           if (!play.cheked) {
+	                               wasPlaying = true;
+	                               // pause the playback so that the it doesn't keep trying to play it while being dragged/seeked (which causes audio disrupt)
+	                               player.pause();
+	                           }
+	                       } else if (event.isUp() || event.isCancel()) {	                           
+	                           seekInProgress = false;
+	                           if (wasPlaying) {
+	                               player.play();
+	                           }
+	                           wasPlaying = false;
+	                           player.seekTime(requestedValue);
+	                       } // else if
+	                   }
+                       
+                       onImmediateValueChanged	: {
+                           elapsed.text = msToString(immediateValue, false);
+                           left.text = msToString(toValue - immediateValue, true);
+                           requestedValue = immediateValue;
+                       }
+                       
+                       function msToString(milliseconds, negative) {
+                           var seconds = parseInt(milliseconds / 1000) % 60;
+                           var minutes = parseInt(milliseconds / 60000);
+                           
+                           return (negative ? '-':'') + minutes + ':' + (seconds < 10 ? '0' + seconds : seconds);
+                       }
+                   }
+                   
+                   Label {
+                       id: left
+                       text: duration.msToString(fromValue, true)
+                       textStyle {
+                           color: Color.White
+                       } 
+                       
+                       horizontalAlignment: HorizontalAlignment.Right
+                       verticalAlignment: VerticalAlignment.Center
+                   }
+               }
+               
+               // Control buttons
+               Container {
+                   layout: StackLayout {
+                       orientation: LayoutOrientation.LeftToRight
+                   }
+                   
+                   topPadding: 20
+                   
+                   horizontalAlignment: HorizontalAlignment.Center
+                   
+                   ImageToggleButton {
+	                   id: repeat
+	                   imageSourceDefault: "asset:///images/ic_tab_repeat_selected.png"
+	                   imageSourceChecked: "asset:///images/ic_tab_repeat_selected.png"
+	                   
+	                   rightMargin: 150
+	                   leftMargin: 150
+	                   
+	                   onCheckedChanged : {
+	                       if (checked)
+	                       {
+	                           player.setRepeatMode(RepeatMode.All);
+	                       }
+	                       else
+	                       {
+	                           player.setRepeatMode(RepeatMode.None);
+	                       }
+	                   }
+	               }
+	               
+	               ImageToggleButton {
+   	                   id: add
+   	                   enabled: !mylist
+   	                   imageSourceDefault: "asset:///images/ic_tab_add_selected.png"
+   	                   imageSourceDisabledUnchecked: "asset:///images/ic_tab_add_unselected.png"
+   	                   
+   	                   rightMargin: 150
+   	                   leftMargin: 150
+   	               
+   	                   onCheckedChanged : {
+   	                       if (add.enabled)
+   	                       {
+   	                           mediaDialog.addMusic(player.track - 1);
+   	                       }
+   	                   }
+   	               }
+   	               
+   	               ImageToggleButton {
+  	                   id: broadcast
+  	                   imageSourceDefault: "asset:///images/ic_tab_broadcast_selected.png"
+  	                   imageSourceChecked: "asset:///images/ic_tab_broadcast_selected.png"
+  	                   
+  	                   rightMargin: 150
+                       leftMargin: 150
+                       
+  	                   onCheckedChanged : {
+  	                   }
+  	               } 
+  	               
+  	               ImageToggleButton {
+ 	                   id: shuffle
+ 	                   imageSourceDefault: "asset:///images/ic_tab_shuffle_selected.png"
+ 	                   imageSourceChecked: "asset:///images/ic_tab_shuffle_selected.png"
+ 	                            
+ 	                   rightMargin: 150
+   	                   leftMargin: 150
+ 	               } 
+               }   
+            }
+            
+            // Artist and song title
+            Container {
+                layout: StackLayout {
+                }
+                
+                bottomPadding: 100                
+                leftPadding: 30
+                rightPadding: 30 
+                
+                horizontalAlignment: HorizontalAlignment.Fill
+                verticalAlignment: VerticalAlignment.Center
+                
+                Label {
+                    id: artist
+                    multiline: true
+                    textStyle {
+                        base: SystemDefaults.TextStyles.TitleText
+			            fontWeight: FontWeight.Bold
+			            fontSize: FontSize.XLarge
+                        color: Color.White
+                        textAlign: TextAlign.Center
+                    }
+                    horizontalAlignment: HorizontalAlignment.Center
+                }
+                
+                Label {
+                    id: title
+                    multiline: true
+                    textStyle {
+                        base: SystemDefaults.TextStyles.BodyText
+                        color: Color.White
+                        textAlign: TextAlign.Center
+                    }
+                    horizontalAlignment: HorizontalAlignment.Center
+                }
+            }
+            
+            // Buttons
+            Container {
+                layout : StackLayout {
+                }
+                
+                horizontalAlignment: HorizontalAlignment.Fill
+                verticalAlignment: VerticalAlignment.Bottom
+                
+                Container {
+                    layout: DockLayout{
+                    }
+                
+                    horizontalAlignment: HorizontalAlignment.Fill
+                    verticalAlignment: VerticalAlignment.Bottom
+                
+                    bottomPadding: 60
+                    leftPadding: 100
+                    rightPadding: 100
+                
+                    ImageButton {
+                        id: rewind
+                        defaultImageSource: "asset:///images/ic_tab_rewind_unselected.png"
+                        pressedImageSource: "asset:///images/ic_tab_rewind_selected.png"
+                    
+                        onClicked : {
+                            player.previousTrack();
+                        }
+                    }
+                
+                    ImageToggleButton {
+                        id: play
+                        checked: true
+                        imageSourceDefault: "asset:///images/ic_tab_play_selected.png"
+                        imageSourcePressedUnchecked: "asset:///images/ic_tab_play_unselected.png"
+                        
+                        imageSourceChecked: "asset:///images/ic_tab_pause_unselected.png"
+                        imageSourcePressedChecked: "asset:///images/ic_tab_pause_selected.png"
+                    
+                        horizontalAlignment: HorizontalAlignment.Center
+                    
+                        onCheckedChanged : checked ? player.play() : player.pause()
+                    }
+                
+                    ImageButton {
+                        id: forward
+                        defaultImageSource: "asset:///images/ic_tab_forward_unselected.png"
+                        pressedImageSource: "asset:///images/ic_tab_forward_selected.png"
+                        
+                        horizontalAlignment: HorizontalAlignment.Right
+                    
+                        onClicked : {
+                            player.nextTrack();
+                        }
+                    }
+                }
+                
+                Container {
+                    layout: DockLayout{
+                    }
+                                
+                    horizontalAlignment: HorizontalAlignment.Center
+                    
+                    bottomPadding: 60
+            
+                    Slider {
+                        value: 0.2
+                    }
+                }
+            }
+        }
+     }
+             
+     attachedObjects: [
+         ForeignWindowControl {
+             id: videoSurface
+             windowId: "myVideoSurface"
+             updatedProperties: WindowProperty.Size | WindowProperty.Position | WindowProperty.Visible
+             preferredWidth: parent.width
+             preferredHeight: parent.height
+         },
+         
+         MediaPlayer {
+             id: player
+             autoPause: true
+             videoOutput: VideoOutput.PrimaryDisplay
+             windowId: videoSurface.windowId
+             
+             onSpeedChanged : {
+                 console.log("onSpeedChanged: " + player.speed);
+                 if (player.speed == 1)
+                 {
+                      play.checked = true;
+                 }
+                 else
+                 {
+                      play.checked = false;
+                 }
+             }
+             
+             onBuffering : {
+//                 buffering.text = "Buffering " + parseInt(percentage*100) + " %";
+//                 
+//                 if (percentage == 1 || percentage == 0)
+//                 {
+//                     buffering.visible = false;
+//                 }
+//                 else
+//                 {
+//                     buffering.visible = true;
+//                 }
+             }
+             
+             onTrackChanged : {
+                 duration.value = 0;
+                 if (mediaDialog.mylist)
+                 {
+                     add.enabled = false;
+                     add.checked = false;
+                 }
+                 else
+                 {
+                     add.enabled = true;
+                 }
+                 
+                 mediaDialog.trackChanged(player.track - 1);
+             }
+             
+             onMetaDataChanged : {
+                 console.log("onMetaDataChanged");
+             }
+             
+             onPositionChanged: {
+                 if (!duration.seekInProgress) {
+                     duration.value = position;
+                 }
+             }
+             
+             onPlaybackCompleted : {
+                 if (shuffle.checked)
+                 {
+                    player.seekTrack(Math.floor(Math.random()*player.trackCount) + 1)
+                 }
+                 else player.nextTrack();
+             }
+             
+             onSeekableChanged: duration.enabled = player.seekable;
+         }
+     ]
+}
