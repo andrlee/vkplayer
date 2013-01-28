@@ -46,12 +46,6 @@ public slots: // common network operations
     virtual bool retrieveMessages(const QString &from, const QString &to, int max) = 0;
     virtual void cancel() = 0;
 
-    //TODO: remove when slot issue resolved
-    virtual bool loadMusic(int count) = 0;
-    virtual bool search(const QString& text, int count) = 0;
-    virtual bool addMusic(const QString& aid, const QString& oid) = 0;
-    virtual bool deleteMusic(const QString& aid, const QString& oid) = 0;
-
 public slots: // common local operations
 
     virtual bool storeCredentials() = 0;

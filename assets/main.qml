@@ -19,8 +19,18 @@ TabbedPane {
                 vkConnection.retrieveMusic();
             }
             
+            onSearchText : {
+                console.log("onSearchText: " + text);
+                vkConnection.search(text, 100);
+            }
+            
             onDeleteMusic: {        
-                 vkConnection.deleteMusic(aid, vkConnection.userId);
+                 vkConnection.deleteMusic(aid);
+            }
+            
+            onAddMusic : {
+                console.log("onAddMusic");                
+                vkConnection.addMusic(aid, oid);
             }
         }
     }
@@ -28,22 +38,6 @@ TabbedPane {
     Tab {
         id: playlist
         title: qsTr("Playlist")
-    }
-    
-    Tab {
-        id: search
-        title: qsTr("Search")
-        imageSource : "asset:///images/ic_tab_search_unselected.png"
-        
-        Search {
-            id: searchPage
-            player: media
-            
-            onSearchText : {
-                console.log("onSearchText: " + text);
-                vkConnection.search(text, 100);
-            }
-        }
     }
     
     onActiveTabChanged: {
@@ -104,19 +98,10 @@ TabbedPane {
         
         VKMediaPlayer {
             id: media
-                            
+                                        
             onAddMusic : {
-                console.log("onAddMusic");
-                var item = searchPage.dataModel.value(index);
-                
-                vkConnection.addMusic(item["aid"], item["owner_id"]);
-            }
-            
-            onTrackChanged: {
-                console.log("onTrackChanged");
-                var item = media.mylist ? musicPage.dataModel.value(index) : searchPage.dataModel.value(index);                
-                media.artist = item["artist"]; 
-                media.title = item["title"];
+                console.log("onAddMusic");                
+                vkConnection.addMusic(aid, oid);
             }
         },
                 
@@ -155,7 +140,7 @@ TabbedPane {
                 if (success)
                 {
                     console.log("Music loaded");   
-                    musicPage.dataModel.appendItem(audioList);
+                    _playlistModel.appendItem(audioList);
                 }
             }
             
@@ -163,14 +148,13 @@ TabbedPane {
                 console.log("onSearchMusicLoaded");
                 if (success)
                 {   
-                    searchPage.dataModel.appendItem(audioList);
+                    _playlistModel.appendItem(audioList);
                 }
             }
             
             onMusicAdded : {
                 if (success) 
                 {
-                    retrieveMusic();
                     media.musicAdded();
                 }
             }
@@ -180,10 +164,6 @@ TabbedPane {
                 if (success) 
                 {
                     retrieveMusic();
-                    if (media.mylist)
-                    {
-                        media.play(musicPage.dataModel.path(), 0);
-                    }
                 }
             }
             

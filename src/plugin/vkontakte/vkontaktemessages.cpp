@@ -45,6 +45,7 @@
 #define DURATION "duration"
 #define TRACK_URL "url"
 #define OWNER_ID "owner_id"
+#define OWNED "owned"
 #define AUDIO_TRACK_PATH "/accounts/1000/shared/music/%1"
 
 // Audio search
@@ -132,7 +133,7 @@ QNetworkRequest createRetrieveAudioRequest(const QString &access_token, int coun
 	return request;
 }
 
-QVariantList parseRetrievedAudioList(const QByteArray &result)
+QVariantList parseRetrievedAudioList(const QByteArray &result, const QString& userId)
 {
 	std::cout << QString(result).toStdString() << std::endl;
 
@@ -170,6 +171,7 @@ QVariantList parseRetrievedAudioList(const QByteArray &result)
 
 			track.insert(AID, aid);
 			track.insert(OWNER_ID, oid);
+			track.insert(OWNED, userId.toInt() == oid.toInt());
 			track.insert(ARTIST, artist);
 			track.insert(TITLE,title);
 			track.insert(DURATION,duration);

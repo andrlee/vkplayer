@@ -5,7 +5,7 @@
 #include <bb/cascades/AbstractPane>
 
 #include "socialconnectplugin.h"
-#include "vkontakteplaylistmodel.h"
+#include "vkontakteplaylist.h"
 
 #include <QTimer>
 
@@ -19,11 +19,14 @@ Vkplayer::Vkplayer(bb::cascades::Application *app)
 	plugin.registerTypes("SocialConnect");
 
 	qmlRegisterType<QTimer>("bb.cascades", 1, 0, "QTimer");
-	qmlRegisterType<VkontaktePlaylistModel>("bb.cascades", 1, 0, "VkontaktePlaylistModel");
 
 	// create scene document from main.qml asset
     // set parent to created document to ensure it exists for the whole application lifetime
     QmlDocument *qml = QmlDocument::create("asset:///main.qml").parent(this);
+
+    //Export custom data model
+    VkontaktePlaylist* pls = new VkontaktePlaylist(this);
+    qml->setContextProperty("_playlistModel", pls);
 
     // create root object for the UI
     AbstractPane *root = qml->createRootObject<AbstractPane>();

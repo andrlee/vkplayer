@@ -3,25 +3,27 @@ import bb.multimedia 1.0
 
 Sheet {
     id: mediaDialog
-    property bool mylist: true
-    property alias title: title.text
-    property alias artist: artist.text
-                
-    signal addMusic(int index)
-    signal trackChanged(int index)
+                    
+    signal addMusic(string aid, string oid)
         
     function musicAdded() {
         add.enabled = false;
         add.checked = false;
     }
     
-    function play(sourceUrl, index) {
-        player.reset();
-        player.sourceUrl = sourceUrl;
-        player.play();
-        player.seekTrack(index + 1);
+    function playTrack(index) {
+        var item = _playlistModel.value(index);
+        
+        artist.text = item["artist"]; 
+        title.text = item["title"];
+        player.sourceUrl = item["url"];
+                 
+        if (MediaError.None == player.play())
+        {
+            _playlistModel.playingTrack = index;
+        }
     }
-            
+                
     Page {
         titleBar: TitleBar {
             visibility: Overlay
@@ -147,27 +149,19 @@ Sheet {
                    
                    ImageToggleButton {
 	                   id: repeat
+	                   checked: true
 	                   imageSourceDefault: "asset:///images/ic_tab_repeat_selected.png"
 	                   imageSourceChecked: "asset:///images/ic_tab_repeat_selected.png"
 	                   
 	                   rightMargin: 150
 	                   leftMargin: 150
 	                   
-	                   onCheckedChanged : {
-	                       if (checked)
-	                       {
-	                           player.setRepeatMode(RepeatMode.All);
-	                       }
-	                       else
-	                       {
-	                           player.setRepeatMode(RepeatMode.None);
-	                       }
-	                   }
+	                   onCheckedChanged : {}
 	               }
 	               
 	               ImageToggleButton {
    	                   id: add
-   	                   enabled: !mylist
+   	                   enabled: !_playlistModel.myTrack
    	                   imageSourceDefault: "asset:///images/ic_tab_add_selected.png"
    	                   imageSourceDisabledUnchecked: "asset:///images/ic_tab_add_unselected.png"
    	                   
@@ -177,7 +171,8 @@ Sheet {
    	                   onCheckedChanged : {
    	                       if (add.enabled)
    	                       {
-   	                           mediaDialog.addMusic(player.track - 1);
+   	                           var item = _playlistModel.value(_playlistModel.playingTrack);
+   	                           mediaDialog.addMusic(item["aid"], item["owner_id"]);
    	                       }
    	                   }
    	               }
@@ -267,7 +262,7 @@ Sheet {
                         pressedImageSource: "asset:///images/ic_tab_rewind_selected.png"
                     
                         onClicked : {
-                            player.previousTrack();
+                            mediaDialog.playTrack(_playlistModel.previousTrack());
                         }
                     }
                 
@@ -293,7 +288,7 @@ Sheet {
                         horizontalAlignment: HorizontalAlignment.Right
                     
                         onClicked : {
-                            player.nextTrack();
+                            mediaDialog.playTrack(_playlistModel.nextTrack());
                         }
                     }
                 }
@@ -356,7 +351,7 @@ Sheet {
              
              onTrackChanged : {
                  duration.value = 0;
-                 if (mediaDialog.mylist)
+                 if (_playlistModel.myTrack)
                  {
                      add.enabled = false;
                      add.checked = false;
@@ -365,8 +360,6 @@ Sheet {
                  {
                      add.enabled = true;
                  }
-                 
-                 mediaDialog.trackChanged(player.track - 1);
              }
              
              onMetaDataChanged : {
@@ -382,9 +375,12 @@ Sheet {
              onPlaybackCompleted : {
                  if (shuffle.checked)
                  {
-                    player.seekTrack(Math.floor(Math.random()*player.trackCount) + 1)
+                     mediaDialog.playTrack(Math.floor(Math.random()*_playlistModel.size()) + 1)
                  }
-                 else player.nextTrack();
+                 else if (repeat.checked)
+                 {
+                     mediaDialog.playTrack(_playlistModel.nextTrack());
+                 }
              }
              
              onSeekableChanged: duration.enabled = player.seekable;

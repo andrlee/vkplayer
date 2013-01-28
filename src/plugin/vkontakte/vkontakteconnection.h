@@ -48,7 +48,7 @@ public slots: // Operations unique to Vkontakte.
     bool loadMusic(int count);
     bool search(const QString& text, int count);
     bool addMusic(const QString& aid, const QString& oid);
-    bool deleteMusic(const QString& aid, const QString& oid);
+    bool deleteMusic(const QString& aid);
 	bool retrieveAudioList(int max);
 	bool saveAudioTrack(const QUrl& url);
 

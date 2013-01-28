@@ -322,7 +322,7 @@ void VKontakteConnection::replyFinished(QNetworkReply* reply)
 			break;
 		case RetriveMusic:
 			emit musicLoaded(requestError == QNetworkReply::NoError,
-				 parseRetrievedAudioList(reply->readAll()));
+				 parseRetrievedAudioList(reply->readAll(), m_userId));
 			break;
 		case DownloadAudioTrack:
 			emit audioTrackSaved(requestError == QNetworkReply::NoError,
@@ -330,7 +330,7 @@ void VKontakteConnection::replyFinished(QNetworkReply* reply)
 			break;
 		case SearchMusic:
 			emit searchMusicLoaded(requestError == QNetworkReply::NoError,
-				 parseRetrievedAudioList(reply->readAll()));
+				 parseRetrievedAudioList(reply->readAll(), m_userId));
 			break;
 		case AddMusic:
 			if (requestError == QNetworkReply::NoError)
@@ -491,7 +491,7 @@ bool VKontakteConnection::addMusic(const QString& aid, const QString& oid)
 	return true;
 }
 
-bool VKontakteConnection::deleteMusic(const QString& aid, const QString& oid)
+bool VKontakteConnection::deleteMusic(const QString& aid)
 {
 	if (!sessionValidated()) {
 		return false;
@@ -499,7 +499,7 @@ bool VKontakteConnection::deleteMusic(const QString& aid, const QString& oid)
 
 	setBusy(true);
 	setTransmitting(true);
-	QNetworkRequest request = createDeleteMusicRequest(accessToken(), aid, oid);
+	QNetworkRequest request = createDeleteMusicRequest(accessToken(), aid, m_userId);
 
 	QNetworkReply* reply = m_networkManager.get(request);
 	if (reply != NULL)

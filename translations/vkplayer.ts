@@ -4,23 +4,28 @@
 <context>
     <name>Music</name>
     <message>
-        <location filename="../assets/Music.qml" line="13"/>
+        <location filename="../assets/Music.qml" line="14"/>
         <source>Now Playing</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>Search</name>
+    <name>MusicListItem</name>
     <message>
-        <location filename="../assets/Search.qml" line="12"/>
-        <source>Now Playing</source>
+        <location filename="../assets/MusicListItem.qml" line="14"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../assets/MusicListItem.qml" line="14"/>
+        <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VKMediaPlayer</name>
     <message>
-        <location filename="../assets/VKMediaPlayer.qml" line="30"/>
+        <location filename="../assets/VKMediaPlayer.qml" line="32"/>
         <source>Done</source>
         <translation type="unfinished"></translation>
     </message>
@@ -33,13 +38,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="30"/>
+        <location filename="../assets/main.qml" line="40"/>
         <source>Playlist</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../assets/main.qml" line="35"/>
-        <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

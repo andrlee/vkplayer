@@ -3,10 +3,11 @@ import bb.cascades 1.0
 Page {
     id: musicPage
     property variant player
-    property alias dataModel : playlist
     
     signal updateMusic()
+    signal searchText(string text)
     signal deleteMusic(string aid)
+    signal addMusic(string aid, string oid)
    
     actions: [                
         ActionItem {
@@ -19,36 +20,79 @@ Page {
     ]   
             
     Container {
+        layout: StackLayout {
+        }
+    	    
+    	verticalAlignment: VerticalAlignment.Center
+    	horizontalAlignment: HorizontalAlignment.Fill
+    	
+    	Container {
+	        topPadding: 10
+	        bottomPadding: 10
+	        rightPadding: 15
+	        leftPadding: 15
+	        
+	        TextField {
+	            id: search
+	            hintText: "Search music"
+	            
+	            onFocusedChanged : {
+	                if (focused && search.text.length == 0) _playlistModel.clear();
+	                else if (!focused && search.text.length == 0) musicPage.updateMusic();
+	            }
+	            	        
+	            onTextChanging: {
+	                console.log("onTextChanging: " + text);
+	                doneTyping.stop();
+	            
+	                if (!text || 0 === text.length)
+	                {
+	                    _playlistModel.clear();
+	                }
+	                else
+	                {
+	                    doneTyping.start(300);
+	                }
+	            }    
+	        }
+	    }
+    	
         ListView {
             signal itemDeleted(string aid)
-            onItemDeleted : musicPage.deleteMusic(aid);
+            signal itemAdded(string aid, string oid)
             
-            dataModel: VkontaktePlaylistModel {
-                id: playlist
-                filename: "my_playlist.m3u"
-                
-                onItemsChanged : {                    
-                    loader.stop();
-                }
-            }
+            onItemDeleted : musicPage.deleteMusic(aid);
+            onItemAdded: musicPage.addMusic(aid, oid);
+            
+            dataModel: _playlistModel
             
             listItemComponents: [
                 ListItemComponent {
                     MusicListItem {
-                    }
+                    }                       
                 }
             ]
             
             leadingVisual : LeadingVisual {
                 id: loader
-                onUpdate : musicPage.updateMusic();
+                onUpdate : if (search.text.length == 0) musicPage.updateMusic();
             }
             
             onTriggered: {
                 player.open();
-                player.mylist = true;
-                player.play(playlist.path(), playlist.indexOfItem(indexPath));
+                player.playTrack(_playlistModel.indexOfItem(indexPath));
             }
         }
     }
+    
+    attachedObjects: [
+        QTimer {
+            id: doneTyping
+            singleShot: true
+            onTimeout: {
+                console.log("onTimeout");
+                musicPage.searchText(search.text);
+            }
+        }
+    ]
 }

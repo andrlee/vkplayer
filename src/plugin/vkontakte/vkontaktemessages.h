@@ -21,7 +21,7 @@ namespace vkontaktemessages
 	QVariantList parseRetrievedMessages(const QByteArray &result);
 
 	QNetworkRequest createRetrieveAudioRequest(const QString &access_token, int count);
-	QVariantList parseRetrievedAudioList(const QByteArray &result);
+	QVariantList parseRetrievedAudioList(const QByteArray &result, const QString& userId);
 
 	QUrl saveAudioTrack(const QByteArray &result, const QUrl& source);
 
