@@ -301,8 +301,7 @@ Sheet {
                     
                     bottomPadding: 60
             
-                    Slider {
-                        value: 0.2
+                    VolumeSlider {
                     }
                 }
             }

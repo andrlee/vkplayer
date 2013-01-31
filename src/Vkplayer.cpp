@@ -6,6 +6,7 @@
 
 #include "socialconnectplugin.h"
 #include "vkontakteplaylist.h"
+#include "volumeslider.h"
 
 #include <QTimer>
 
@@ -19,6 +20,7 @@ Vkplayer::Vkplayer(bb::cascades::Application *app)
 	plugin.registerTypes("SocialConnect");
 
 	qmlRegisterType<QTimer>("bb.cascades", 1, 0, "QTimer");
+	qmlRegisterType<VolumeSlider>("bb.cascades", 1, 0, "VolumeSlider");
 
 	// create scene document from main.qml asset
     // set parent to created document to ensure it exists for the whole application lifetime
