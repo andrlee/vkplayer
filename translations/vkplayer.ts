@@ -9,7 +9,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/Music.qml" line="65"/>
+        <location filename="../assets/Music.qml" line="63"/>
         <source>Search music</source>
         <translation type="unfinished"></translation>
     </message>
@@ -51,7 +51,7 @@
 <context>
     <name>Videos</name>
     <message>
-        <location filename="../assets/Videos.qml" line="54"/>
+        <location filename="../assets/Videos.qml" line="52"/>
         <source>Search videos</source>
         <translation type="unfinished"></translation>
     </message>

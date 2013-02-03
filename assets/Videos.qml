@@ -35,9 +35,7 @@ Page {
 	    	    preferredHeight: search.preferredHeight + searchContainer.topPadding
 	    	            	    
         	    ImageView {
-	                imageSource: search.focused ? "asset:///images/search_background_focused.png" 
-	                                            : "asset:///images/search_background_unfocused.png"
-	                
+	                imageSource: "asset:///images/search_background.png"
 	                verticalAlignment: VerticalAlignment.Fill
 	                horizontalAlignment: HorizontalAlignment.Fill
         	    }

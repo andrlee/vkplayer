@@ -9,7 +9,7 @@ TabbedPane {
     Tab {
         id: music
         title: qsTr("Music")
-        imageSource : "asset:///images/ic_tab_music_unselected.png"
+        imageSource :  "asset:///images/ic_tab_music.png"
         
         Music {
             id: musicPage
@@ -39,7 +39,7 @@ TabbedPane {
     Tab {
         id: videos
         title: qsTr("Videos")
-        imageSource : "asset:///images/ic_tab_videos_unselected.png"
+        imageSource : "asset:///images/ic_tab_video.png"
         
         Videos {
             id: videoPage
