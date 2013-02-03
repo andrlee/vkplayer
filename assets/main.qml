@@ -16,11 +16,12 @@ TabbedPane {
             player: media
                 
             onUpdateMusic : {
-                vkConnection.retrieveMusic();
+                vkConnection.retrieveMusic(activity);
             }
             
             onSearchText : {
                 console.log("onSearchText: " + text);
+                musicPage.startActivity();
                 vkConnection.search(text, 200);
             }
             
@@ -41,12 +42,15 @@ TabbedPane {
         imageSource : "asset:///images/ic_tab_videos_unselected.png"
         
         Videos {
+            id: videoPage
+            
             onUpdateVideos : {
-                vkConnection.retrieveVideos();
+                vkConnection.retrieveVideos(activity);
             }
             
             onSearchText : {
                 console.log("onSearchText: " + text);
+                videoPage.startActivity();
                 vkConnection.searchVideo(text, 50);
             }
             
@@ -64,11 +68,11 @@ TabbedPane {
     onActiveTabChanged: {
         if (activeTab == music)
         {
-            vkConnection.retrieveMusic();
+            vkConnection.retrieveMusic(false);
         }
         else if (activeTab == videos)
         {
-            vkConnection.retrieveVideos();
+            vkConnection.retrieveVideos(false);
         }
     }
     
@@ -146,7 +150,7 @@ TabbedPane {
                 {
                     console.log("Authentication success");                    
                     loginDialog.close();
-                    retrieveMusic();
+                    retrieveMusic(true);
                 } 
                 else
                 { 
@@ -166,15 +170,17 @@ TabbedPane {
             
             onMusicLoaded : {
                 console.log("onMusicLoaded");
+                musicPage.stopActivity();  
                 if (success)
                 {
-                    console.log("Music loaded");   
+                    console.log("Music loaded");  
                     _musicPlaylist.appendItem(audioList);
                 }
             }
             
             onSearchMusicLoaded : {
                 console.log("onSearchMusicLoaded");
+                musicPage.stopActivity();   
                 if (success)
                 {   
                     _musicPlaylist.appendItem(audioList);
@@ -192,12 +198,13 @@ TabbedPane {
                 console.log("onMusicDeleted");
                 if (success) 
                 {
-                    retrieveMusic();
+                    retrieveMusic(true);
                 }
             }
             
             onVideosLoaded : {
                 console.log("onVideosLoaded");
+                videoPage.stopActivity();
                 if (success)
                 {
                     console.log("Videos loaded");   
@@ -207,6 +214,7 @@ TabbedPane {
             
             onSearchVideoLoaded : {
                 console.log("onSearchVideoLoaded");
+                videoPage.stopActivity();
                 if (success)
                 {   
                     _videoPlaylist.appendItem(videoList);
@@ -219,16 +227,22 @@ TabbedPane {
                 console.log("onVideoDeleted");
                 if (success) 
                 {
-                    retrieveVideos();
+                    retrieveVideos(true);
                 }
             }
             
-            function retrieveVideos() {
+            function retrieveVideos(activity) {
+                if (activity)
+                    videoPage.startActivity();
+                    
                 vkConnection.loadVideos(50);
             }
             
-            function retrieveMusic() {
-                 vkConnection.loadMusic(200);
+            function retrieveMusic(activity) {
+                if (activity)
+                    musicPage.startActivity();
+                    
+                vkConnection.loadMusic(200);
             }
         }
     ]

@@ -7,6 +7,10 @@ Container {
         activity.stop();
     }
     
+    function isRunning() {
+        return loading.visible || refresh.visible;
+    }
+    
     signal update();
     
     layout: DockLayout {
@@ -28,11 +32,13 @@ Container {
         }
             
         Label {
+            id: loading
             text: "Loading..."
             visible: activity.running
         }
             
         Label {
+            id: refresh
             text: "Pull down to refresh"
             visible: !activity.running
         }

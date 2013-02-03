@@ -4,8 +4,13 @@
 <context>
     <name>Music</name>
     <message>
-        <location filename="../assets/Music.qml" line="14"/>
+        <location filename="../assets/Music.qml" line="24"/>
         <source>Now Playing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../assets/Music.qml" line="65"/>
+        <source>Search music</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -44,6 +49,14 @@
     </message>
 </context>
 <context>
+    <name>Videos</name>
+    <message>
+        <location filename="../assets/Videos.qml" line="54"/>
+        <source>Search videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
         <location filename="../assets/main.qml" line="11"/>
@@ -51,7 +64,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="40"/>
+        <location filename="../assets/main.qml" line="41"/>
         <source>Videos</source>
         <translation type="unfinished"></translation>
     </message>
