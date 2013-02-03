@@ -13,6 +13,11 @@ VkontaktePlaylist::~VkontaktePlaylist()
 {
 }
 
+bool VkontaktePlaylist::empty() const
+{
+	return ArrayDataModel::isEmpty();
+}
+
 int VkontaktePlaylist::playingTrack() const
 {
 	return m_playingTrack;
@@ -71,10 +76,12 @@ bool VkontaktePlaylist::contains(const QVariant& item) const
 void VkontaktePlaylist::clear()
 {
 	pthread_mutex_lock(&mutex);
-	ArrayDataModel::clear();
-	pthread_mutex_unlock(&mutex);
 
+	ArrayDataModel::clear();
 	setPlayingTrack(0);
+	emit emptyChanged(true);
+
+	pthread_mutex_unlock(&mutex);
 }
 
 void VkontaktePlaylist::appendItem(const QVariantList &values)
@@ -85,6 +92,8 @@ void VkontaktePlaylist::appendItem(const QVariantList &values)
 	append(values);
 	emit myTrackChanged(isCurrentTrackOwner());
 	pthread_mutex_unlock(&mutex);
+
+	emit emptyChanged(false);
 }
 
 bool VkontaktePlaylist::isCurrentTrackOwner()

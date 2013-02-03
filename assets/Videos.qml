@@ -87,6 +87,21 @@ Page {
     	                id: activity
     	            }
     	        }
+    	        
+    	        Container {
+        	        topPadding: searchContainer.topPadding
+        	        rightPadding: searchContainer.rightPadding
+	        		leftPadding: searchContainer.leftPadding
+        	        
+        	        horizontalAlignment: HorizontalAlignment.Center
+	                verticalAlignment: VerticalAlignment.Center
+        	        
+        	        ImageView {
+        	            id: emptyList
+        	            visible: _videoPlaylist.empty && !activity.visible
+		                imageSource: "asset:///images/ic_empty_list.png"
+		            }
+    	        }
 		        
         	    ListView {
         	        property variant listImageManager: videoImageManager

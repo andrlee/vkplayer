@@ -2,12 +2,14 @@
 #define VKONTAKTEPLAYLIST_H_
 
 #include <bb/cascades/ArrayDataModel>
+#include <bb/cascades/DataModelChangeType>
 
 class VkontaktePlaylist : public bb::cascades::ArrayDataModel
 {
 	Q_OBJECT
 	Q_PROPERTY(int playingTrack READ playingTrack WRITE setPlayingTrack NOTIFY playingTrackChanged)
 	Q_PROPERTY(bool myTrack READ myTrack NOTIFY myTrackChanged)
+	Q_PROPERTY(bool empty READ empty NOTIFY emptyChanged)
 
 public:
 	VkontaktePlaylist(QObject* parent = 0);
@@ -23,6 +25,7 @@ public:
 	void setPlayingTrack(int index);
 
 	bool myTrack();
+	bool empty() const;
 
 public slots:
 	void clear();
@@ -30,6 +33,7 @@ public slots:
 signals:
 	void playingTrackChanged(int index);
 	void myTrackChanged(bool myTrack);
+	void emptyChanged(bool empty);
 
 private:
 	bool isCurrentTrackOwner();

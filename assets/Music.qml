@@ -99,6 +99,21 @@ Page {
     	            }
     	        }
     	        
+    	        Container {
+        	        topPadding: searchContainer.topPadding
+        	        rightPadding: searchContainer.rightPadding
+	        		leftPadding: searchContainer.leftPadding
+        	        
+        	        horizontalAlignment: HorizontalAlignment.Center
+	                verticalAlignment: VerticalAlignment.Center
+        	        
+        	        ImageView {
+        	            id: emptyList
+        	            visible: _musicPlaylist.empty && !activity.visible
+		                imageSource: "asset:///images/ic_empty_list.png"
+		            }
+    	        }
+    	        
     	        ListView {
 	                id: list
 	                signal itemDeleted(string aid)
