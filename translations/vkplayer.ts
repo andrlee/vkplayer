@@ -25,8 +25,21 @@
 <context>
     <name>VKMediaPlayer</name>
     <message>
-        <location filename="../assets/VKMediaPlayer.qml" line="32"/>
+        <location filename="../assets/VKMediaPlayer.qml" line="33"/>
         <source>Done</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>VideoListItem</name>
+    <message>
+        <location filename="../assets/VideoListItem.qml" line="15"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../assets/VideoListItem.qml" line="15"/>
+        <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -39,7 +52,7 @@
     </message>
     <message>
         <location filename="../assets/main.qml" line="40"/>
-        <source>Playlist</source>
+        <source>Videos</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

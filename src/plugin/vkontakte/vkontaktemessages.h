@@ -14,7 +14,11 @@ namespace vkontaktemessages
     	DownloadAudioTrack,
     	SearchMusic,
     	AddMusic,
-    	DeleteMusic
+    	DeleteMusic,
+    	RetrieveVideos,
+    	SearchVideo,
+    	AddVideo,
+    	DeleteVideo
     };
 
 	QNetworkRequest createRetrieveMessagesRequest(const QString &access_token, int count);
@@ -32,6 +36,18 @@ namespace vkontaktemessages
 
 	QNetworkRequest createDeleteMusicRequest(const QString &access_token, const QString& aid, const QString& oid);
 	bool musicDeleted(const QByteArray &result);
+
+	QNetworkRequest createRetrieveVideosRequest(const QString &access_token, const QString& userId, int count);
+	QVariantList parseRetrievedVideosList(const QByteArray &result, const QString& userId);
+
+	QNetworkRequest createSearchVideoRequest(const QString &access_token, const QString& text, int count);
+	QVariantList parseSearchedVideoList(const QByteArray &result, const QString& userId);
+
+	QNetworkRequest createAddVideoRequest(const QString &access_token, const QString& vid, const QString& oid);
+	bool videoAdded(const QByteArray &result);
+
+	QNetworkRequest createDeleteVideoRequest(const QString &access_token, const QString& vid, const QString& oid);
+	bool videoDeleted(const QByteArray &result);
 }
 
 #endif /* VKONTAKTEMESSAGES_H_ */

@@ -66,6 +66,12 @@
     
     <!--  The category where the application appears. Either core.games or core.media. -->
     <category>core.media</category>
+    <splashScreens>
+       <image>vk-splash-media.jpg</image>
+    </splashScreens>
+    <icon>
+       <image>vk-icon.png</image>
+    </icon>
     <configuration name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="arm/o.le-v7-g/vkplayer" entry="true" type="Qnx/Elf">vkplayer</asset>
@@ -85,9 +91,6 @@
     </configuration>
     
     <!--  The icon for the application, which should be 86x86. -->
-    <icon>
-        <image>icon.png</image>
-    </icon>
 
     <asset path="icon.png">icon.png</asset>
     <asset path="assets">assets</asset>
@@ -96,6 +99,8 @@
     <asset path="translations" dest="qm">
         <include name="*.qm"/>
     </asset>
+    <asset path="/Volumes/Public/Work/vk-icon.png">vk-icon.png</asset>
+    <asset path="/Volumes/Public/Work/vk-splash-media.jpg">vk-splash-media.jpg</asset>
     
     <!-- Request permission to execute native code.  Required for native applications. -->
     <permission system="true">run_native</permission>

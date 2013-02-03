@@ -12,7 +12,7 @@ Sheet {
     }
     
     function playTrack(index) {
-        var item = _playlistModel.value(index);
+        var item = _musicPlaylist.value(index);
         
         artist.text = item["artist"]; 
         title.text = item["title"];
@@ -20,13 +20,14 @@ Sheet {
                  
         if (MediaError.None == player.play())
         {
-            _playlistModel.playingTrack = index;
+            _musicPlaylist.playingTrack = index;
         }
     }
                 
     Page {
         titleBar: TitleBar {
             visibility: Overlay
+            appearance: TitleBarAppearance.Default
                     
             dismissAction: ActionItem {
                 title: qsTr("Done")
@@ -171,23 +172,23 @@ Sheet {
    	                   onCheckedChanged : {
    	                       if (add.enabled)
    	                       {
-   	                           var item = _playlistModel.value(_playlistModel.playingTrack);
+   	                           var item = _musicPlaylist.value(_musicPlaylist.playingTrack);
    	                           mediaDialog.addMusic(item["aid"], item["owner_id"]);
    	                       }
    	                   }
    	               }
    	               
-   	               ImageToggleButton {
-  	                   id: broadcast
-  	                   imageSourceDefault: "asset:///images/ic_tab_broadcast_selected.png"
-  	                   imageSourceChecked: "asset:///images/ic_tab_broadcast_selected.png"
-  	                   
-  	                   rightMargin: 150
-                       leftMargin: 150
-                       
-  	                   onCheckedChanged : {
-  	                   }
-  	               } 
+//   	               ImageToggleButton {
+//  	                   id: broadcast
+//  	                   imageSourceDefault: "asset:///images/ic_tab_broadcast_selected.png"
+//  	                   imageSourceChecked: "asset:///images/ic_tab_broadcast_selected.png"
+//  	                   
+//  	                   rightMargin: 150
+//                       leftMargin: 150
+//                       
+//  	                   onCheckedChanged : {
+//  	                   }
+//  	               } 
   	               
   	               ImageToggleButton {
  	                   id: shuffle
@@ -258,22 +259,22 @@ Sheet {
                 
                     ImageButton {
                         id: rewind
-                        defaultImageSource: "asset:///images/ic_tab_rewind_unselected.png"
-                        pressedImageSource: "asset:///images/ic_tab_rewind_selected.png"
+                        defaultImageSource: "asset:///images/ic_rewind.png"
+                        pressedImageSource: "asset:///images/ic_rewind.png"
                     
                         onClicked : {
-                            mediaDialog.playTrack(_playlistModel.previousTrack());
+                            mediaDialog.playTrack(_musicPlaylist.previousTrack());
                         }
                     }
                 
                     ImageToggleButton {
                         id: play
                         checked: true
-                        imageSourceDefault: "asset:///images/ic_tab_play_selected.png"
-                        imageSourcePressedUnchecked: "asset:///images/ic_tab_play_unselected.png"
+                        imageSourceDefault: "asset:///images/ic_play.png"
+                        imageSourcePressedUnchecked: "asset:///images/ic_play.png"
                         
-                        imageSourceChecked: "asset:///images/ic_tab_pause_unselected.png"
-                        imageSourcePressedChecked: "asset:///images/ic_tab_pause_selected.png"
+                        imageSourceChecked: "asset:///images/ic_pause.png"
+                        imageSourcePressedChecked: "asset:///images/ic_pause.png"
                     
                         horizontalAlignment: HorizontalAlignment.Center
                     
@@ -282,13 +283,13 @@ Sheet {
                 
                     ImageButton {
                         id: forward
-                        defaultImageSource: "asset:///images/ic_tab_forward_unselected.png"
-                        pressedImageSource: "asset:///images/ic_tab_forward_selected.png"
+                        defaultImageSource: "asset:///images/ic_forward.png"
+                        pressedImageSource: "asset:///images/ic_forward.png"
                         
                         horizontalAlignment: HorizontalAlignment.Right
                     
                         onClicked : {
-                            mediaDialog.playTrack(_playlistModel.nextTrack());
+                            mediaDialog.playTrack(_musicPlaylist.nextTrack());
                         }
                     }
                 }
@@ -350,7 +351,7 @@ Sheet {
              
              onTrackChanged : {
                  duration.value = 0;
-                 if (_playlistModel.myTrack)
+                 if (_musicPlaylist.myTrack)
                  {
                      add.enabled = false;
                      add.checked = false;
@@ -374,11 +375,11 @@ Sheet {
              onPlaybackCompleted : {
                  if (shuffle.checked)
                  {
-                     mediaDialog.playTrack(Math.floor(Math.random()*_playlistModel.size()) + 1)
+                     mediaDialog.playTrack(Math.floor(Math.random()*_musicPlaylist.size()) + 1)
                  }
                  else if (repeat.checked)
                  {
-                     mediaDialog.playTrack(_playlistModel.nextTrack());
+                     mediaDialog.playTrack(_musicPlaylist.nextTrack());
                  }
              }
              

@@ -352,6 +352,34 @@ void VKontakteConnection::replyFinished(QNetworkReply* reply)
 				emit musicDeleted(false);
 			}
 			break;
+		case RetrieveVideos:
+			emit videosLoaded(requestError == QNetworkReply::NoError,
+							  parseRetrievedVideosList(reply->readAll(), m_userId));
+			break;
+		case SearchVideo:
+			emit searchVideoLoaded(requestError == QNetworkReply::NoError,
+								   parseSearchedVideoList(reply->readAll(), m_userId));
+			break;
+		case AddVideo:
+			if (requestError == QNetworkReply::NoError)
+			{
+				emit videoAdded(vkontaktemessages::videoAdded(reply->readAll()));
+			}
+			else
+			{
+				emit videoAdded(false);
+			}
+			break;
+		case DeleteVideo:
+			if (requestError == QNetworkReply::NoError)
+			{
+				emit videoDeleted(vkontaktemessages::videoDeleted(reply->readAll()));
+			}
+			else
+			{
+				emit videoDeleted(false);
+			}
+			break;
 		default:
 			break;
 	}
@@ -405,23 +433,6 @@ bool VKontakteConnection::removeCredentials()
 	settings.remove(USER_ID_KEY);
 
 	return settings.status() == QSettings::NoError;
-}
-
-bool VKontakteConnection::retrieveAudioList(int max)
-{
-	if (!sessionValidated()) {
-		return false;
-	}
-
-	setBusy(true);
-	setTransmitting(true);
-	QNetworkRequest request = createRetrieveAudioRequest(accessToken(), max);
-
-	QNetworkReply* reply = m_networkManager.get(request);
-	if (reply != NULL)
-		reply->setProperty(REQUEST_TYPE, RetriveMusic);
-
-	return true;
 }
 
 bool VKontakteConnection::saveAudioTrack(const QUrl& url)
@@ -507,3 +518,72 @@ bool VKontakteConnection::deleteMusic(const QString& aid)
 
 	return true;
 }
+
+bool VKontakteConnection::loadVideos(int count)
+{
+	if (!sessionValidated()) {
+		return false;
+	}
+
+	setBusy(true);
+	setTransmitting(true);
+	QNetworkRequest request = createRetrieveVideosRequest(accessToken(), m_userId, count);
+
+	QNetworkReply* reply = m_networkManager.get(request);
+	if (reply != NULL)
+		reply->setProperty(REQUEST_TYPE, RetrieveVideos);
+
+	return true;
+}
+
+bool VKontakteConnection::searchVideo(const QString& text, int count)
+{
+	if (!sessionValidated()) {
+		return false;
+	}
+
+	setBusy(true);
+	setTransmitting(true);
+	QNetworkRequest request = createSearchVideoRequest(accessToken(), text, count);
+
+	QNetworkReply* reply = m_networkManager.get(request);
+	if (reply != NULL)
+		reply->setProperty(REQUEST_TYPE, SearchVideo);
+
+	return true;
+}
+
+bool VKontakteConnection::addVideo(const QString& vid, const QString& oid)
+{
+	if (!sessionValidated()) {
+		return false;
+	}
+
+	setBusy(true);
+	setTransmitting(true);
+	QNetworkRequest request = createAddVideoRequest(accessToken(), vid, oid);
+
+	QNetworkReply* reply = m_networkManager.get(request);
+	if (reply != NULL)
+		reply->setProperty(REQUEST_TYPE, AddVideo);
+
+	return true;
+}
+
+bool VKontakteConnection::deleteVideo(const QString& vid)
+{
+	if (!sessionValidated()) {
+		return false;
+	}
+
+	setBusy(true);
+	setTransmitting(true);
+	QNetworkRequest request = createDeleteVideoRequest(accessToken(), vid, m_userId);
+
+	QNetworkReply* reply = m_networkManager.get(request);
+	if (reply != NULL)
+		reply->setProperty(REQUEST_TYPE, DeleteVideo);
+
+	return true;
+}
+

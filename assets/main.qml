@@ -21,7 +21,7 @@ TabbedPane {
             
             onSearchText : {
                 console.log("onSearchText: " + text);
-                vkConnection.search(text, 100);
+                vkConnection.search(text, 200);
             }
             
             onDeleteMusic: {        
@@ -36,11 +36,40 @@ TabbedPane {
     }
     
     Tab {
-        id: playlist
-        title: qsTr("Playlist")
+        id: videos
+        title: qsTr("Videos")
+        imageSource : "asset:///images/ic_tab_videos_unselected.png"
+        
+        Videos {
+            onUpdateVideos : {
+                vkConnection.retrieveVideos();
+            }
+            
+            onSearchText : {
+                console.log("onSearchText: " + text);
+                vkConnection.searchVideo(text, 50);
+            }
+            
+            onAddVideo : {
+                console.log("onAddMusic");                
+                vkConnection.addVideo(vid, oid);
+            }
+            
+            onDeleteVideo: {        
+                vkConnection.deleteVideo(vid);
+            }
+        }
     }
     
     onActiveTabChanged: {
+        if (activeTab == music)
+        {
+            vkConnection.retrieveMusic();
+        }
+        else if (activeTab == videos)
+        {
+            vkConnection.retrieveVideos();
+        }
     }
     
     attachedObjects: [
@@ -140,7 +169,7 @@ TabbedPane {
                 if (success)
                 {
                     console.log("Music loaded");   
-                    _playlistModel.appendItem(audioList);
+                    _musicPlaylist.appendItem(audioList);
                 }
             }
             
@@ -148,7 +177,7 @@ TabbedPane {
                 console.log("onSearchMusicLoaded");
                 if (success)
                 {   
-                    _playlistModel.appendItem(audioList);
+                    _musicPlaylist.appendItem(audioList);
                 }
             }
             
@@ -167,8 +196,39 @@ TabbedPane {
                 }
             }
             
+            onVideosLoaded : {
+                console.log("onVideosLoaded");
+                if (success)
+                {
+                    console.log("Videos loaded");   
+                    _videoPlaylist.appendItem(videoList);
+                }
+            }
+            
+            onSearchVideoLoaded : {
+                console.log("onSearchVideoLoaded");
+                if (success)
+                {   
+                    _videoPlaylist.appendItem(videoList);
+                }
+            }
+            
+            onVideoAdded : if (success) console.log("onVideoAdded");
+            
+            onVideoDeleted : {
+                console.log("onVideoDeleted");
+                if (success) 
+                {
+                    retrieveVideos();
+                }
+            }
+            
+            function retrieveVideos() {
+                vkConnection.loadVideos(50);
+            }
+            
             function retrieveMusic() {
-                 vkConnection.loadMusic(100);
+                 vkConnection.loadMusic(200);
             }
         }
     ]

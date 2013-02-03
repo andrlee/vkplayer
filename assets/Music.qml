@@ -47,7 +47,7 @@ Page {
 	            
 	                if (!text || 0 === text.length)
 	                {
-	                    _playlistModel.clear();
+	                    _musicPlaylist.clear();
 	                }
 	                else
 	                {
@@ -64,7 +64,7 @@ Page {
             onItemDeleted : musicPage.deleteMusic(aid);
             onItemAdded: musicPage.addMusic(aid, oid);
             
-            dataModel: _playlistModel
+            dataModel: _musicPlaylist
             
             listItemComponents: [
                 ListItemComponent {
@@ -80,7 +80,7 @@ Page {
             
             onTriggered: {
                 player.open();
-                player.playTrack(_playlistModel.indexOfItem(indexPath));
+                player.playTrack(_musicPlaylist.indexOfItem(indexPath));
             }
         }
     }

@@ -49,8 +49,12 @@ public slots: // Operations unique to Vkontakte.
     bool search(const QString& text, int count);
     bool addMusic(const QString& aid, const QString& oid);
     bool deleteMusic(const QString& aid);
-	bool retrieveAudioList(int max);
 	bool saveAudioTrack(const QUrl& url);
+
+	bool loadVideos(int count);
+	bool searchVideo(const QString& text, int count);
+	bool addVideo(const QString& vid, const QString& oid);
+    bool deleteVideo(const QString& vid);
 
 signals:
 	void clientIdChanged(const QString &clientId);
@@ -64,6 +68,11 @@ signals:
     void searchMusicLoaded(bool success, const QVariantList &audioList);
     void musicAdded(bool success);
     void musicDeleted(bool success);
+
+    void videosLoaded(bool success, const QVariantList &videoList);
+    void searchVideoLoaded(bool success, const QVariantList &videoList);
+    void videoAdded(bool success);
+    void videoDeleted(bool success);
 
 protected slots:
     void onUrlChanged(const QUrl &url);
