@@ -92,15 +92,14 @@
     
     <!--  The icon for the application, which should be 86x86. -->
 
-    <asset path="icon.png">icon.png</asset>
     <asset path="assets">assets</asset>
     
     <!-- Locale support -->
     <asset path="translations" dest="qm">
         <include name="*.qm"/>
     </asset>
-    <asset path="/Volumes/Public/Work/vk-icon.png">vk-icon.png</asset>
-    <asset path="/Volumes/Public/Work/vk-splash-media.jpg">vk-splash-media.jpg</asset>
+    <asset path="vk-icon.png">vk-icon.png</asset>
+    <asset path="vk-splash-media.jpg">vk-splash-media.jpg</asset>
     
     <!-- Request permission to execute native code.  Required for native applications. -->
     <permission system="true">run_native</permission>
