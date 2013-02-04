@@ -6,6 +6,29 @@ TabbedPane {
     id: tabs
     showTabsOnActionBar: true
     
+    Menu.definition: MenuDefinition {
+        actions: [
+            ActionItem {
+                title: qsTr("Settings")
+                imageSource: "asset:///images/ic_tab_settings_selected.png"
+                                                  
+                onTriggered: {
+                    var loginDialog = login.createObject();
+                    loginDialog.open();
+                }
+            },
+            
+            ActionItem {
+                title: qsTr("Logout")
+                imageSource: "asset:///images/ic_tab_logout_selected.png"
+                          
+                onTriggered: {
+                    vkConnection.deauthenticate();
+                }
+            }
+        ]
+    }
+    
     Tab {
         id: music
         title: qsTr("Music")
@@ -107,6 +130,11 @@ TabbedPane {
                  }
             }
         },
+        
+        ComponentDefinition {                      
+            id: login                       
+            source: "Login.qml"             
+        },
                 
         SystemToast {
             id: toast
@@ -165,6 +193,7 @@ TabbedPane {
                 {
                     removeCredentials();
                     loginDialog.open();
+                    authenticate();
                 }
             }
             
