@@ -17,17 +17,7 @@ Page {
     function stopActivity() {
         activity.visible = false;
         activity.stop();
-    }
-   
-    actions: [                
-        ActionItem {
-            title: qsTr("Now Playing")
-            imageSource: "asset:///images/action_playing.png"
-            onTriggered: {
-                player.open();
-            }
-        }
-    ]   
+    }  
             
     Container {
         layout: DockLayout  {
@@ -137,6 +127,8 @@ Page {
 	                }
 	                
 	                onTriggered: {
+	                    musicPage.addAction(nowPlaying);
+	                    
 	                    player.open();
 	                    player.playTrack(_musicPlaylist.indexOfItem(indexPath));
 	                }
@@ -152,6 +144,15 @@ Page {
             onTimeout: {
                 console.log("onTimeout");
                 musicPage.searchText(search.text);
+            }
+        },
+        
+        ActionItem {
+            id: nowPlaying
+            title: qsTr("Now Playing")
+            imageSource: "asset:///images/action_playing.png"
+            onTriggered: {
+                player.open();
             }
         }
     ]

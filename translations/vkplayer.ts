@@ -4,12 +4,12 @@
 <context>
     <name>Music</name>
     <message>
-        <location filename="../assets/Music.qml" line="24"/>
+        <location filename="../assets/Music.qml" line="152"/>
         <source>Now Playing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/Music.qml" line="63"/>
+        <location filename="../assets/Music.qml" line="53"/>
         <source>Search music</source>
         <translation type="unfinished"></translation>
     </message>
