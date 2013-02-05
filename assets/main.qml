@@ -13,7 +13,7 @@ TabbedPane {
                 imageSource: "asset:///images/ic_tab_settings_selected.png"
                                                   
                 onTriggered: {
-                    toast.push("Settings Unavailable. Thank you for your patience!");
+                    toast.push("Woops! 404:Not Found");
                 }
             },
             
