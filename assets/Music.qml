@@ -43,8 +43,8 @@ Page {
         	    
 	        	Container {
 	        	    id: searchContainer
-	        	    topPadding: 20
-	        		bottomPadding: 20
+	        	    topPadding: 25
+	        		bottomPadding: 25
 	        		rightPadding: 15
 	        		leftPadding: 15
 	        		

@@ -3,6 +3,9 @@
 
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
+// Random number between low and high
+static int randInt(int low, int high);
+
 VkontaktePlaylist::VkontaktePlaylist(QObject* parent):
 	ArrayDataModel(parent),
 	m_playingTrack(0)
@@ -54,6 +57,11 @@ int VkontaktePlaylist::previousTrack() const
 	return m_playingTrack == 0 ? size() - 1 : m_playingTrack - 1;
 }
 
+int VkontaktePlaylist::randomTrack() const
+{
+	return randInt(0, size() -1);
+}
+
 int VkontaktePlaylist::indexOfItem(const QVariantList &indexPath)
 {
 	return indexOf(data(indexPath));
@@ -100,4 +108,9 @@ bool VkontaktePlaylist::isCurrentTrackOwner()
 {
 	QVariantMap val = value(playingTrack()).toMap();
 	return val["owned"].toBool();
+}
+
+static int randInt(int low, int high)
+{
+	return qrand() % ((high + 1) - low) + low;
 }

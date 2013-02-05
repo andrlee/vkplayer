@@ -152,7 +152,7 @@ Sheet {
 	                   id: repeat
 	                   checked: true
 	                   imageSourceDefault: "asset:///images/ic_tab_repeat_selected.png"
-	                   imageSourceChecked: "asset:///images/ic_tab_repeat_selected.png"
+	                   imageSourceChecked: "asset:///images/ic_tab_repeat_checked.png"
 	                   
 	                   rightMargin: 150
 	                   leftMargin: 150
@@ -193,7 +193,7 @@ Sheet {
   	               ImageToggleButton {
  	                   id: shuffle
  	                   imageSourceDefault: "asset:///images/ic_tab_shuffle_selected.png"
- 	                   imageSourceChecked: "asset:///images/ic_tab_shuffle_selected.png"
+ 	                   imageSourceChecked: "asset:///images/ic_tab_shuffle_checked.png"
  	                            
  	                   rightMargin: 150
    	                   leftMargin: 150
@@ -375,11 +375,18 @@ Sheet {
              onPlaybackCompleted : {
                  if (shuffle.checked)
                  {
-                     mediaDialog.playTrack(Math.floor(Math.random()*_musicPlaylist.size()) + 1)
+                     mediaDialog.playTrack(_musicPlaylist.randomTrack())
+                     return;
                  }
-                 else if (repeat.checked)
+                 
+                 if (repeat.checked)
                  {
                      mediaDialog.playTrack(_musicPlaylist.nextTrack());
+                 }
+                 else
+                 {
+                     player.pause();
+                     duration.value = 0;
                  }
              }
              

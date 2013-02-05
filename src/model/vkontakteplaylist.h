@@ -17,6 +17,7 @@ public:
 
 	Q_INVOKABLE int nextTrack() const;
 	Q_INVOKABLE int previousTrack() const;
+	Q_INVOKABLE int randomTrack() const;
 	Q_INVOKABLE int indexOfItem(const QVariantList &indexPath);
 	Q_INVOKABLE bool contains(const QVariant& item) const;
 	Q_INVOKABLE void appendItem(const QVariantList &values);
