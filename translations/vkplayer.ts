@@ -30,7 +30,7 @@
 <context>
     <name>VKMediaPlayer</name>
     <message>
-        <location filename="../assets/VKMediaPlayer.qml" line="33"/>
+        <location filename="../assets/VKMediaPlayer.qml" line="38"/>
         <source>Done</source>
         <translation type="unfinished"></translation>
     </message>
@@ -69,12 +69,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="45"/>
+        <location filename="../assets/main.qml" line="46"/>
         <source>Music</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="75"/>
+        <location filename="../assets/main.qml" line="76"/>
         <source>Videos</source>
         <translation type="unfinished"></translation>
     </message>

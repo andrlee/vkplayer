@@ -22,6 +22,7 @@ TabbedPane {
                 imageSource: "asset:///images/ic_tab_logout_selected.png"
                           
                 onTriggered: {
+                    media.stop();
                     vkConnection.deauthenticate();
                 }
             }

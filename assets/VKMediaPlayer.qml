@@ -23,6 +23,11 @@ Sheet {
             _musicPlaylist.playingTrack = index;
         }
     }
+    
+    function stop() {
+        player.stop();
+        duration.value = 0;
+    }
                 
     Page {
         titleBar: TitleBar {
