@@ -13,8 +13,7 @@ TabbedPane {
                 imageSource: "asset:///images/ic_tab_settings_selected.png"
                                                   
                 onTriggered: {
-                    var loginDialog = login.createObject();
-                    loginDialog.open();
+                    toast.push("Settings Unavailable. Thank you for your patience!");
                 }
             },
             
@@ -29,65 +28,6 @@ TabbedPane {
         ]
     }
     
-    Tab {
-        id: music
-        title: qsTr("Music")
-        imageSource :  "asset:///images/ic_tab_music.png"
-        
-        Music {
-            id: musicPage
-            player: media
-                
-            onUpdateMusic : {
-                vkConnection.retrieveMusic(activity);
-            }
-            
-            onSearchText : {
-                console.log("onSearchText: " + text);
-                musicPage.startActivity();
-                vkConnection.search(text, 200);
-            }
-            
-            onDeleteMusic: {        
-                 vkConnection.deleteMusic(aid);
-            }
-            
-            onAddMusic : {
-                console.log("onAddMusic");                
-                vkConnection.addMusic(aid, oid);
-            }
-        }
-    }
-    
-    Tab {
-        id: videos
-        title: qsTr("Videos")
-        imageSource : "asset:///images/ic_tab_video.png"
-        
-        Videos {
-            id: videoPage
-            
-            onUpdateVideos : {
-                vkConnection.retrieveVideos(activity);
-            }
-            
-            onSearchText : {
-                console.log("onSearchText: " + text);
-                videoPage.startActivity();
-                vkConnection.searchVideo(text, 50);
-            }
-            
-            onAddVideo : {
-                console.log("onAddMusic");                
-                vkConnection.addVideo(vid, oid);
-            }
-            
-            onDeleteVideo: {        
-                vkConnection.deleteVideo(vid);
-            }
-        }
-    }
-    
     onActiveTabChanged: {
         if (activeTab == music)
         {
@@ -100,42 +40,114 @@ TabbedPane {
     }
     
     attachedObjects: [
+        Tab {
+            id: music
+            title: qsTr("Music")
+            imageSource :  "asset:///images/ic_tab_music.png"
+                
+            Music {
+                id: musicPage
+                player: media
+                        
+                onUpdateMusic : {
+                    vkConnection.retrieveMusic(activity);
+                }
+                    
+                onSearchText : {
+                    console.log("onSearchText: " + text);
+                    musicPage.startActivity();
+                    vkConnection.search(text, 200);
+                }
+                    
+                onDeleteMusic: {        
+                    vkConnection.deleteMusic(aid);
+                }
+                    
+                onAddMusic : {
+                    console.log("onAddMusic");                
+                    vkConnection.addMusic(aid, oid);
+                }
+            }
+        },
+        
+        Tab {
+            id: videos
+            title: qsTr("Videos")
+            imageSource : "asset:///images/ic_tab_video.png"
+                
+            Videos {
+                id: videoPage
+                    
+                onUpdateVideos : {
+                    vkConnection.retrieveVideos(activity);
+                }
+                    
+                onSearchText : {
+                    console.log("onSearchText: " + text);
+                    videoPage.startActivity();
+                    vkConnection.searchVideo(text, 50);
+                }
+                    
+                onAddVideo : {
+                    console.log("onAddMusic");                
+                    vkConnection.addVideo(vid, oid);
+                }
+                    
+                onDeleteVideo: {        
+                    vkConnection.deleteVideo(vid);
+                }
+            }
+        },
+        
+        Tab {
+            id: login
+            
+            Login {
+                                
+                onLoginRequested: {
+                    console.log("onLoginRequested");
+                    loginSheet.open();
+                    
+                    vkConnection.authenticate();
+                }
+                
+                onSignupRequested : {
+                    _invoke.invokeMediaPlayer("http://m.vk.com/join"); // it's actually invoking browser
+                }
+            }
+        },
+        
         Sheet {
-            id: loginDialog
-            Page {
+            id: loginSheet
+            Page {                                
                 Container {
                     background: Color.LightGray
                     
                     ScrollView {
                         visible: true
                     		        
-                         scrollViewProperties {
-                    	     scrollMode: ScrollMode.Vertical
-                    	 }
+                     	scrollViewProperties {
+                     	    scrollMode: ScrollMode.Vertical
+                     	}
                     	 
-                    	 WebView {
-                             id: webView
-                             preferredHeight: parent.height
-                             preferredWidth: parent.width
-                             onUrlChanged: {
+                        WebView {
+                            id: webView
+                            preferredHeight: parent.height
+                            preferredWidth: parent.width
+                            onUrlChanged: {
                                  console.log("WebView onUrlChanged")
                                  webInterface.url = url;
-                             }
+                            }
                              
-                             onNavigationRequested: {
-                                 console.log("NavigationRequested: " + request.url + " navigationType=" + request.navigationType)
-                             }   
-                         }
-                     }
-                 }
+                            onNavigationRequested: {
+                                console.log("NavigationRequested: " + request.url + " navigationType=" + request.navigationType);
+                            }   
+                        }
+                    }
+                }
             }
         },
-        
-        ComponentDefinition {                      
-            id: login                       
-            source: "Login.qml"             
-        },
-                
+                        
         SystemToast {
             id: toast
                         
@@ -151,6 +163,7 @@ TabbedPane {
         
         WebInterface {
             id: webInterface
+            
             onUrlChanged: { 
                 console.log("WebInterface onUrlChanged")
                 webView.url = url;
@@ -176,8 +189,13 @@ TabbedPane {
                 console.log("onAuthenticateCompleted");
                 if (success)
                 {
-                    console.log("Authentication success");                    
-                    loginDialog.close();
+                    console.log("Authentication success");
+                    
+                    loginSheet.close();
+                    tabs.remove(login);
+                    tabs.add(music);
+                    tabs.add(videos);
+                                    
                     retrieveMusic(true);
                 } 
                 else
@@ -192,8 +210,10 @@ TabbedPane {
                 if (success)
                 {
                     removeCredentials();
-                    loginDialog.open();
-                    authenticate();
+                    
+                    tabs.remove(music);
+                    tabs.remove(videos);
+                    tabs.add(login);
                 }
             }
             
@@ -286,9 +306,7 @@ TabbedPane {
         if (!vkConnection.authenticated)
         {
             console.log("Authentication required");
-            
-            loginDialog.open();
-            vkConnection.authenticate();       
+            tabs.add(login);
         }
     }
 }

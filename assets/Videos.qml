@@ -42,8 +42,8 @@ Page {
         	
 	        	Container {
 	        	    id: searchContainer
-			        topPadding: 20
-			        bottomPadding: 20
+			        topPadding: 25
+			        bottomPadding: 25
 			        rightPadding: 15
 			        leftPadding: 15
 			        
@@ -129,7 +129,7 @@ Page {
         	        onTriggered: {
         	            console.log("onTriggered");
         	            var item = _videoPlaylist.value(_videoPlaylist.indexOfItem(indexPath));
-        	            invoke.invokeMediaPlayer(item["player"]);
+        	            _invoke.invokeMediaPlayer(item["player"]);
         	        }
         	        
         	        attachedObjects: [
@@ -155,10 +155,6 @@ Page {
                 console.log("onTimeout");
                 videosPage.searchText(search.text);
             }
-        },
-        
-        InvokeManager {
-            id: invoke
         }
     ]
 }  

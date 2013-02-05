@@ -59,22 +59,22 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../assets/main.qml" line="22"/>
-        <source>Logout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../assets/main.qml" line="12"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="34"/>
+        <location filename="../assets/main.qml" line="21"/>
+        <source>Logout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../assets/main.qml" line="45"/>
         <source>Music</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="64"/>
+        <location filename="../assets/main.qml" line="75"/>
         <source>Videos</source>
         <translation type="unfinished"></translation>
     </message>

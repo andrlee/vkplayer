@@ -26,7 +26,6 @@ Vkplayer::Vkplayer(bb::cascades::Application *app)
 	qmlRegisterType<VolumeSlider>("bb.cascades", 1, 0, "VolumeSlider");
 	qmlRegisterType<NetImageTracker>("bb.cascades", 1, 0, "NetImageTracker");
 	qmlRegisterType<NetImageManager>("bb.cascades", 1, 0, "NetImageManager");
-	qmlRegisterType<InvokeManager>("bb.cascades", 1, 0, "InvokeManager");
 
 	// create scene document from main.qml asset
     // set parent to created document to ensure it exists for the whole application lifetime
@@ -38,6 +37,9 @@ Vkplayer::Vkplayer(bb::cascades::Application *app)
 
     VkontaktePlaylist* videoPlaylist = new VkontaktePlaylist(this);
 	qml->setContextProperty("_videoPlaylist", videoPlaylist);
+
+	InvokeManager* invoke = new InvokeManager(this);
+	qml->setContextProperty("_invoke", invoke);
 
     // create root object for the UI
     AbstractPane *root = qml->createRootObject<AbstractPane>();

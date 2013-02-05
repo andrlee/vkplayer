@@ -162,7 +162,7 @@ Sheet {
 	               
 	               ImageToggleButton {
    	                   id: add
-   	                   enabled: !_playlistModel.myTrack
+   	                   enabled: !_musicPlaylist.myTrack
    	                   imageSourceDefault: "asset:///images/ic_tab_add_selected.png"
    	                   imageSourceDisabledUnchecked: "asset:///images/ic_tab_add_unselected.png"
    	                   
