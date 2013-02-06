@@ -10,6 +10,7 @@
 #include "netimagetracker.h"
 #include "netimagemanager.h"
 #include "invokemanager.h"
+#include "leadingvisual.h"
 
 #include <QTimer>
 
@@ -26,6 +27,7 @@ Vkplayer::Vkplayer(bb::cascades::Application *app)
 	qmlRegisterType<VolumeSlider>("bb.cascades", 1, 0, "VolumeSlider");
 	qmlRegisterType<NetImageTracker>("bb.cascades", 1, 0, "NetImageTracker");
 	qmlRegisterType<NetImageManager>("bb.cascades", 1, 0, "NetImageManager");
+	qmlRegisterType<LeadingVisual>("bb.cascades", 1, 0, "LeadingVisual");
 
 	// create scene document from main.qml asset
     // set parent to created document to ensure it exists for the whole application lifetime
