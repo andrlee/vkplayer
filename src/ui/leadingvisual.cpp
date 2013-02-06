@@ -50,6 +50,11 @@ LeadingVisual::LeadingVisual():
 
 LeadingVisual::~LeadingVisual()
 {
+	delete _resetUpdater;
+	delete _updateDone;
+	delete _activity;
+	delete _loadingLabel;
+	delete _refreshLabel;
 }
 
 void LeadingVisual::stop()
