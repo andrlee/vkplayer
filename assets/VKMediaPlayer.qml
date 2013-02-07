@@ -31,7 +31,6 @@ Sheet {
                 
     Page {
         titleBar: TitleBar {
-            visibility: Overlay
             appearance: TitleBarAppearance.Default
                     
             dismissAction: ActionItem {
@@ -43,9 +42,14 @@ Sheet {
         }    
         
         // Control tab        
-        Container {     
-            background: Color.Black
+        Container {
             layout: DockLayout  {
+            }
+            
+            ImageView {
+                imageSource: "asset:///images/background_fancy.jpg"
+                verticalAlignment: VerticalAlignment.Fill
+                horizontalAlignment: HorizontalAlignment.Fill
             }
             
             Container {
@@ -56,19 +60,8 @@ Sheet {
                                             
                 topPadding: 40
                 leftPadding: 30
-                rightPadding: 30 
-                
-                Label {
-                   id: buffering
-                   text: "Buffering 0 %"
-                   visible: false
-                   textStyle {
-                       base: SystemDefaults.TextStyles.BodyText
-                       color: Color.White
-                   }
-                   horizontalAlignment: HorizontalAlignment.Center
-               }
-               
+                rightPadding: 30
+                              
                Container {
                    layout: DockLayout  {
                    }

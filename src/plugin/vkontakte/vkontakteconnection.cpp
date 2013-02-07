@@ -8,10 +8,13 @@
 #include <QStringList>
 #include <QUrl>
 
+#include <bb/system/SystemToast>
+
 #include <pthread.h>
 
 #include "webinterface.h"
 
+#define CLIENT_ID "3269076"
 #define ACCESS_TOKEN_KEY "vk_access_token"
 #define USER_ID_KEY "vk_user_id"
 
@@ -22,12 +25,18 @@
 #define USER_ID "user_id"
 #define ERROR_STR "error"
 
+//Error Codes
+#define NO_ERROR 0
+#define AUTH_ERROR 5
+
 static pthread_mutex_t s_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 using namespace vkontaktemessages;
+using namespace bb::system;
 
 VKontakteConnection::VKontakteConnection(QObject *parent) :
     SocialConnection(parent),
+    m_clientId(CLIENT_ID),
     m_state(NotLogged)
 {
 	connect(&m_networkManager, SIGNAL(finished(QNetworkReply*)),
@@ -270,6 +279,26 @@ int VKontakteConnection::checkReplyErrors(QNetworkReply* reply)
     return requestError;
 }
 
+void VKontakteConnection::checkVKConnectionErrors(const QByteArray& reply)
+{
+	//Check for VK connection errors
+	QString error_msg;
+	int error = getVKConnectionErrorCode(reply, error_msg);
+	if (NO_ERROR != error)
+	{
+		SystemToast* toast = new SystemToast;
+		toast->setBody(error_msg);
+		toast->exec();
+		delete toast;
+	}
+
+	if (AUTH_ERROR == error)
+	{
+		setState(NotLogged);
+		setAuthenticated(false);
+	}
+}
+
 bool VKontakteConnection::postMessage(const QVariantMap &message)
 {
 	Q_UNUSED(message);
@@ -314,28 +343,32 @@ void VKontakteConnection::replyFinished(QNetworkReply* reply)
 
 	pthread_mutex_lock(&s_mutex);
 	const int requestError = checkReplyErrors(reply);
+
+	QByteArray payload = reply->readAll();
+	checkVKConnectionErrors(payload);
+
 	switch(reply->property(REQUEST_TYPE).toInt())
 	{
 		case RetriveMessages:
 			 emit retrieveMessagesCompleted(requestError == QNetworkReply::NoError,
-				  parseRetrievedMessages(reply->readAll()));
+				  parseRetrievedMessages(payload));
 			break;
 		case RetriveMusic:
 			emit musicLoaded(requestError == QNetworkReply::NoError,
-				 parseRetrievedAudioList(reply->readAll(), m_userId));
+				 parseRetrievedAudioList(payload, m_userId));
 			break;
 		case DownloadAudioTrack:
 			emit audioTrackSaved(requestError == QNetworkReply::NoError,
-				 vkontaktemessages::saveAudioTrack(reply->readAll(), reply->url()));
+				 vkontaktemessages::saveAudioTrack(payload, reply->url()));
 			break;
 		case SearchMusic:
 			emit searchMusicLoaded(requestError == QNetworkReply::NoError,
-				 parseRetrievedAudioList(reply->readAll(), m_userId));
+				 parseRetrievedAudioList(payload, m_userId));
 			break;
 		case AddMusic:
 			if (requestError == QNetworkReply::NoError)
 			{
-				emit musicAdded(vkontaktemessages::musicAdded(reply->readAll()));
+				emit musicAdded(vkontaktemessages::musicAdded(payload));
 			}
 			else
 			{
@@ -345,7 +378,7 @@ void VKontakteConnection::replyFinished(QNetworkReply* reply)
 		case DeleteMusic:
 			if (requestError == QNetworkReply::NoError)
 			{
-				emit musicDeleted(vkontaktemessages::musicDeleted(reply->readAll()));
+				emit musicDeleted(vkontaktemessages::musicDeleted(payload));
 			}
 			else
 			{
@@ -354,16 +387,16 @@ void VKontakteConnection::replyFinished(QNetworkReply* reply)
 			break;
 		case RetrieveVideos:
 			emit videosLoaded(requestError == QNetworkReply::NoError,
-							  parseRetrievedVideosList(reply->readAll(), m_userId));
+							  parseRetrievedVideosList(payload, m_userId));
 			break;
 		case SearchVideo:
 			emit searchVideoLoaded(requestError == QNetworkReply::NoError,
-								   parseSearchedVideoList(reply->readAll(), m_userId));
+								   parseSearchedVideoList(payload, m_userId));
 			break;
 		case AddVideo:
 			if (requestError == QNetworkReply::NoError)
 			{
-				emit videoAdded(vkontaktemessages::videoAdded(reply->readAll()));
+				emit videoAdded(vkontaktemessages::videoAdded(payload));
 			}
 			else
 			{
@@ -373,7 +406,7 @@ void VKontakteConnection::replyFinished(QNetworkReply* reply)
 		case DeleteVideo:
 			if (requestError == QNetworkReply::NoError)
 			{
-				emit videoDeleted(vkontaktemessages::videoDeleted(reply->readAll()));
+				emit videoDeleted(vkontaktemessages::videoDeleted(payload));
 			}
 			else
 			{
@@ -411,9 +444,6 @@ bool VKontakteConnection::restoreCredentials()
 	setUserId(settings.value(USER_ID_KEY).toString());
 
 	qDebug() << "Restore: Access token for user" << m_accessToken;
-
-	checkAuthenticationUrl(QUrl("https://oauth.vk.com/blank.html#access_token=1fa8bc3a97c6f046655c77979592a2535af7b8cb818ddbcfe8d7bd8667c7b050fc73974ce7b41c78802af&expires_in=0&user_id=1422086"));
-	return true;
 
 	// Check is VK authenticated.
 	if (isAuthorized() && !authenticated()) {

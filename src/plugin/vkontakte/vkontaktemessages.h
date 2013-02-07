@@ -21,6 +21,8 @@ namespace vkontaktemessages
     	DeleteVideo
     };
 
+	int getVKConnectionErrorCode(const QByteArray &result, QString& error_msg);
+
 	QNetworkRequest createRetrieveMessagesRequest(const QString &access_token, int count);
 	QVariantList parseRetrievedMessages(const QByteArray &result);
 

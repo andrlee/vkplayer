@@ -30,7 +30,7 @@
 <context>
     <name>VKMediaPlayer</name>
     <message>
-        <location filename="../assets/VKMediaPlayer.qml" line="38"/>
+        <location filename="../assets/VKMediaPlayer.qml" line="37"/>
         <source>Done</source>
         <translation type="unfinished"></translation>
     </message>

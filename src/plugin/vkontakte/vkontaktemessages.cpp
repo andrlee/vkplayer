@@ -69,11 +69,32 @@
 #define RESPONSE "response"
 #define DATE_TIME_FORMAT "d MMM hh:mm"
 #define COUNT "count"
+#define ERROR "error"
+#define ERROR_CODE "error_code"
+#define ERROR_MSG "error_msg"
 
 namespace vkontaktemessages
 {
 
 static QString seconds_toHHMMSS(int duration);
+
+int getVKConnectionErrorCode(const QByteArray &result, QString& error_msg)
+{
+	QVariantList list;
+	QScriptEngine engine;
+	QScriptValue response = engine.evaluate("(" + QString(result) + ")").property(ERROR);
+	QScriptValueIterator it(response);
+
+	int error_code = 0;
+	while (it.hasNext()) {
+		it.next();
+
+		error_code = it.value().property(ERROR_CODE).toInteger();
+		error_msg = it.value().property(ERROR_MSG).toString();
+	}
+
+	return error_code;
+}
 
 QNetworkRequest createRetrieveMessagesRequest(const QString &access_token, int count)
 {

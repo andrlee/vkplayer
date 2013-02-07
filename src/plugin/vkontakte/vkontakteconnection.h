@@ -98,6 +98,7 @@ private:    // Members
     void setWebInterfaceActive(const bool active);
     bool sessionValidated();
     int checkReplyErrors(QNetworkReply* reply);
+    void checkVKConnectionErrors(const QByteArray&);
 
 private:    // Data
     QNetworkAccessManager m_networkManager;

@@ -183,8 +183,7 @@ TabbedPane {
         VKontakteConnection {
             id: vkConnection
             webInterface: webInterface 
-            permissions: ["wall", "status", "friends", "audio", "video", "offline"]
-            clientId: "3269076"
+            permissions: ["wall", "friends", "audio", "video", "offline"]
             
             onAuthenticateCompleted: {
                 console.log("onAuthenticateCompleted");
