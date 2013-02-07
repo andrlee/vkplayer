@@ -150,7 +150,7 @@ Page {
         ActionItem {
             id: nowPlaying
             title: qsTr("Now Playing")
-            imageSource: "asset:///images/action_playing.png"
+            imageSource: "asset:///images/ic_tab_now_playing_selected.png"
             onTriggered: {
                 player.open();
             }
