@@ -17,12 +17,12 @@
 <context>
     <name>MusicListItem</name>
     <message>
-        <location filename="../assets/MusicListItem.qml" line="15"/>
+        <location filename="../assets/MusicListItem.qml" line="14"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../assets/MusicListItem.qml" line="15"/>
+        <location filename="../assets/MusicListItem.qml" line="14"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>

@@ -14,7 +14,7 @@
 
 #include "webinterface.h"
 
-#define CLIENT_ID "3269076"
+#define CLIENT_ID "3410979" //"3269076"
 #define ACCESS_TOKEN_KEY "vk_access_token"
 #define USER_ID_KEY "vk_user_id"
 
