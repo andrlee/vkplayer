@@ -123,6 +123,8 @@ TabbedPane {
             Page {                                
                 Container {
                     background: Color.LightGray
+                    layout: DockLayout {
+                    }
                     
                     ScrollView {
                         visible: true
@@ -136,7 +138,7 @@ TabbedPane {
                             preferredHeight: parent.height
                             preferredWidth: parent.width
                             onUrlChanged: {
-                                 console.log("WebView onUrlChanged")
+                                 console.log("WebView onUrlChanged: " + url);
                                  webInterface.url = url;
                             }
                              
@@ -165,7 +167,7 @@ TabbedPane {
         WebInterface {
             id: webInterface
             
-            onUrlChanged: { 
+            onUrlChanged: {
                 console.log("WebInterface onUrlChanged")
                 webView.url = url;
             }
