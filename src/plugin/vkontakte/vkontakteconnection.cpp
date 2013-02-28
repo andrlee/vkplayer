@@ -11,16 +11,15 @@
 #include <bb/system/SystemToast>
 
 #include <pthread.h>
-
 #include "webinterface.h"
 
-#define CLIENT_ID "3410979" //"3269076"
+#define CLIENT_ID "3410979"// "3269076"
 #define ACCESS_TOKEN_KEY "vk_access_token"
 #define USER_ID_KEY "vk_user_id"
 
 #define OAUTH_URL_FORMAT "%1?client_id=%2&redirect_uri=%3&display=popup&response_type=token"
 #define OAUTH_URL "https://oauth.vk.com/authorize"
-#define REDIRECT_URL "https://oauth.vk.com/blank.html"
+#define REDIRECT_URL "http://oauth.vk.com/blank.html"
 #define ACCESS_TOKEN "access_token"
 #define USER_ID "user_id"
 #define ERROR_STR "error"
@@ -445,6 +444,9 @@ bool VKontakteConnection::restoreCredentials()
 
 	qDebug() << "Restore: Access token for user" << m_accessToken;
 
+//	checkAuthenticationUrl(QUrl("http://oauth.vk.com/blank.html#access_token=1fa8bc3a97c6f046655c77979592a2535af7b8cb818ddbcfe8d7bd8667c7b050fc73974ce7b41c78802af&expires_in=0&user_id=1422086"));
+//	return true;
+
 	// Check is VK authenticated.
 	if (isAuthorized() && !authenticated()) {
 		setAuthenticated(true);
@@ -616,4 +618,3 @@ bool VKontakteConnection::deleteVideo(const QString& vid)
 
 	return true;
 }
-

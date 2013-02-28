@@ -148,7 +148,6 @@ Sheet {
                    
                    ImageToggleButton {
 	                   id: repeat
-	                   checked: true
 	                   imageSourceDefault: "asset:///images/ic_tab_repeat_selected.png"
 	                   imageSourceChecked: "asset:///images/ic_tab_repeat_checked.png"
 	                   
@@ -379,12 +378,12 @@ Sheet {
                  
                  if (repeat.checked)
                  {
-                     mediaDialog.playTrack(_musicPlaylist.nextTrack());
+                     player.seekTime(0);
+                     player.play();
                  }
                  else
                  {
-                     player.pause();
-                     duration.value = 0;
+                     mediaDialog.playTrack(_musicPlaylist.nextTrack());
                  }
              }
              
